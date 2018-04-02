@@ -5,15 +5,26 @@
 
 # Install any needed gems. This is useful if you mount
 # the project as a volume to /lobsters
-bundle install
+# bundle install
+
+# Get current state of database.
+db_version=$(rake db:version)
+db_status=$?
 
 # Provision Database.
-if [ ! -e /var/tmp/first_run_completed ]; then
-  echo "Standing up database."
-  rake db:setup
-  touch /var/tmp/first_run_completed
-else
-  echo "Running database migrations."
+if [ "$db_status" != "0" ]; then
+  echo "Creating database."
+  rake db:create
+  rake db:schema:load
+  rake db:migrate
+  rake db:seed
+elif [ "$db_version" = "Current version: 0" ]; then
+  echo "Loading schema."
+  rake db:schema:load
+  rake db:migrate
+  rake db:seed
+else:
+  echo "Migrating database."
   rake db:migrate
 fi
 
@@ -22,6 +33,11 @@ if [ "$SECRET_KEY" = "" ]; then
   echo "No SECRET_KEY provided, generating one now."
   export SECRET_KEY=$(bundle exec rake secret)
   echo "Your new secret key: $SECRET_KEY"
+fi
+
+# Compile our assets.
+if [ "$RAILS_ENV" = "production" ]; then
+  bundle exec rake assets:precompile
 fi
 
 # Start the rails application.

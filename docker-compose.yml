@@ -36,6 +36,7 @@ services:
       - RAILS_ENV=development
       - LOBSTER_HOSTNAME=localhost
       - VIRTUAL_HOST=localhost
+      - RAILS_MAX_THREADS=5
     ports:
       - "3000:3000"
     depends_on:
