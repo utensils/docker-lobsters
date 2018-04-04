@@ -76,6 +76,12 @@ ENV MARIADB_HOST="mariadb" \
     GEM_PATH="/lobsters/.gem" \
     BUNDLE_PATH="/lobsters/.bundle" \
     RAILS_MAX_THREADS="5" \
+    SMTP_HOST="127.0.0.1" \
+    SMTP_PORT="25" \
+    SMTP_STARTTLS_AUTO="true" \
+    SMTP_USERNAME="lobsters" \
+    SMTP_PASSWORD="lobsters" \
+    RAILS_LOG_TO_STDOUT="1" \
     PATH="/lobsters/.gem/ruby/2.3.0/bin:/lobster/.yarn/bin:$PATH"
 
 # Expose HTTP port.

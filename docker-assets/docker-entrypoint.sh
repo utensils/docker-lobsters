@@ -47,7 +47,7 @@ trap "echo 'Stopping Lobsters - pid: $pid'; kill -SIGTERM $pid" SIGINT SIGTERM
 
 # Run the cron job every 5 minutes
 while : ; do
-  echo "Running cron jobs."
+  echo "$(date +"%Y-%m-%d %H:%M:%S") - Running cron jobs."
   bundle exec ruby script/mail_new_activity
   bundle exec ruby script/post_to_twitter
   sleep 300
