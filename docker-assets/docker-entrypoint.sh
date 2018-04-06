@@ -7,23 +7,34 @@
 # the project as a volume to /lobsters
 # bundle install
 
+# Used for simple logging purposes.
+timestamp="date +\"%Y-%m-%d %H:%M:%S\""
+alias echo="echo \"$(eval $timestamp) -$@\""
+
 # Get current state of database.
 db_version=$(rake db:version)
 db_status=$?
+
+echo "DB Version: ${db_version}"
 
 # Provision Database.
 if [ "$db_status" != "0" ]; then
   echo "Creating database."
   rake db:create
+  echo "Loading schema."
   rake db:schema:load
+  echo "Migrating database."
   rake db:migrate
+  echo "Seeding database."
   rake db:seed
 elif [ "$db_version" = "Current version: 0" ]; then
   echo "Loading schema."
   rake db:schema:load
+  echo "Migrating database."
   rake db:migrate
+  echo "Seeding database."
   rake db:seed
-else:
+else
   echo "Migrating database."
   rake db:migrate
 fi
