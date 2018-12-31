@@ -30,7 +30,7 @@ COPY ./lobsters/Gemfile ./lobsters/Gemfile.lock /lobsters/
 # Install needed runtime & development dependencies. If this is a developer_build we don't remove
 # the build-deps after doing a bundle install.
 RUN chown -R lobsters:lobsters /lobsters \
-    && apk --no-cache --update --virtual deps add mariadb-client sqlite-libs tzdata nodejs \
+    && apk --no-cache --update --virtual deps add mariadb-client mariadb-connector-c sqlite-libs tzdata nodejs \
     && apk --no-cache --virtual build-deps add build-base gcc mariadb-dev linux-headers sqlite-dev git bash curl gnupg \
     && export PATH=/lobsters/.gem/ruby/2.3.0/bin:$PATH \
     && export GEM_HOME="/lobsters/.gem" \
