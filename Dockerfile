@@ -29,32 +29,51 @@ COPY ./lobsters/Gemfile ./lobsters/Gemfile.lock /lobsters/
 
 # Install needed runtime & development dependencies. If this is a developer_build we don't remove
 # the build-deps after doing a bundle install.
-RUN chown -R lobsters:lobsters /lobsters \
-    && apk --no-cache --update --virtual deps add mariadb-client-libs sqlite-libs tzdata nodejs \
-    && apk --no-cache --virtual build-deps add build-base gcc mariadb-dev linux-headers sqlite-dev git bash curl gnupg \
-    && export PATH=/lobsters/.gem/ruby/2.3.0/bin:$PATH \
-    && export GEM_HOME="/lobsters/.gem" \
-    && export GEM_PATH="/lobsters/.gem" \
-    && export BUNDLE_PATH="/lobsters/.bundle" \
-    && cd /lobsters \
-    && su lobsters -c "curl -o- -L https://yarnpkg.com/install.sh | bash" \
-    && su lobsters -c "gem install bundler --user-install" \
-    && su lobsters -c "bundle install --no-cache" \
-    && su lobsters -c "bundle add puma" \
-    && if [ "${developer_build}" != "true" ]; then apk del build-deps; fi \
-    && mv /lobsters/Gemfile /lobsters/Gemfile.bak \
-    && mv /lobsters/Gemfile.lock /lobsters/Gemfile.lock.bak
+RUN set -xe; \
+    chown -R lobsters:lobsters /lobsters; \
+    apk add --no-cache --update --virtual .runtime-deps \
+        mariadb-connector-c \
+        nodejs \
+        npm \
+        sqlite-libs \
+        tzdata; \
+    apk add --no-cache --virtual .build-deps \
+        bash \
+        build-base \
+        curl \
+        gcc \
+        git \
+        gnupg \
+        linux-headers \
+        mariadb-connector-c-dev \
+        mariadb-dev \
+        sqlite-dev; \
+    export PATH=/lobsters/.gem/ruby/2.3.0/bin:$PATH; \
+    export GEM_HOME="/lobsters/.gem"; \
+    export GEM_PATH="/lobsters/.gem"; \
+    export BUNDLE_PATH="/lobsters/.bundle"; \
+    cd /lobsters; \
+    su lobsters -c "gem install bundler --user-install"; \
+    su lobsters -c "bundle install --no-cache"; \
+    su lobsters -c "bundle add puma"; \
+    if [ "$developer_build" != "true" ]; \
+    then \
+        apk del .build-deps; \
+    fi; \
+    mv /lobsters/Gemfile /lobsters/Gemfile.bak; \
+    mv /lobsters/Gemfile.lock /lobsters/Gemfile.lock.bak;
 
 # Copy lobsters into the container.
 COPY ./lobsters ./docker-assets /lobsters/
 
 # Set proper permissions and move assets and configs.
-RUN mv /lobsters/Gemfile.bak /lobsters/Gemfile \
-    && mv /lobsters/Gemfile.lock.bak /lobsters/Gemfile.lock \
-    && chown -R lobsters:lobsters /lobsters \
-    && mv /lobsters/docker-entrypoint.sh /usr/local/bin/ \
-    && chmod 755 /usr/local/bin/docker-entrypoint.sh \
-    && rm /lobsters/Gemfile.lock
+RUN set -xe; \
+    mv /lobsters/Gemfile.bak /lobsters/Gemfile; \
+    mv /lobsters/Gemfile.lock.bak /lobsters/Gemfile.lock; \
+    chown -R lobsters:lobsters /lobsters; \
+    mv /lobsters/docker-entrypoint.sh /usr/local/bin/; \
+    chmod 755 /usr/local/bin/docker-entrypoint.sh; \
+    rm /lobsters/Gemfile.lock;
 
 # Drop down to unprivileged users
 USER lobsters
@@ -82,7 +101,7 @@ ENV MARIADB_HOST="mariadb" \
     SMTP_USERNAME="lobsters" \
     SMTP_PASSWORD="lobsters" \
     RAILS_LOG_TO_STDOUT="1" \
-    PATH="/lobsters/.gem/ruby/2.3.0/bin:/lobster/.yarn/bin:$PATH"
+    PATH="/lobsters/.gem/ruby/2.3.0/bin:$PATH"
 
 # Expose HTTP port.
 EXPOSE 3000
