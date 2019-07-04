@@ -1,6 +1,6 @@
-# Lobsters in a minimal Docker container.
+# Lobste.rs in a minimal Docker image
 
-[![Build Status](https://travis-ci.org/jamesbrink/docker-lobsters.svg?branch=master)](https://travis-ci.org/jamesbrink/docker-lobsters) [![Docker Automated build](https://img.shields.io/docker/automated/jamesbrink/lobsters.svg)](https://hub.docker.com/r/jamesbrink/lobsters/) [![Docker Pulls](https://img.shields.io/docker/pulls/jamesbrink/lobsters.svg)](https://hub.docker.com/r/jamesbrink/lobsters/) [![Docker Stars](https://img.shields.io/docker/stars/jamesbrink/lobsters.svg)](https://hub.docker.com/r/jamesbrink/lobsters/) [![](https://images.microbadger.com/badges/image/jamesbrink/lobsters.svg)](https://microbadger.com/images/jamesbrink/lobsters "Get your own image badge on microbadger.com") [![](https://images.microbadger.com/badges/version/jamesbrink/lobsters.svg)](https://microbadger.com/images/jamesbrink/lobsters "Get your own version badge on microbadger.com")
+[![Docker Automated build](https://img.shields.io/docker/automated/utensils/lobsters.svg)](https://hub.docker.com/r/utensils/lobsters/) [![Docker Pulls](https://img.shields.io/docker/pulls/utensils/lobsters.svg)](https://hub.docker.com/r/utensils/lobsters/) [![Docker Stars](https://img.shields.io/docker/stars/utensils/lobsters.svg)](https://hub.docker.com/r/utensils/lobsters/) [![](https://images.microbadger.com/badges/image/utensils/lobsters.svg)](https://microbadger.com/images/utensils/lobsters "Get your own image badge on microbadger.com") [![](https://images.microbadger.com/badges/version/utensils/lobsters.svg)](https://microbadger.com/images/utensils/lobsters "Get your own version badge on microbadger.com")
 
 
 ## About
@@ -16,7 +16,7 @@ Using this repository.
 This will serve up Lobsters at http://localhost/
 
 ```shell
-git clone git@github.com:jamesbrink/docker-lobsters.git
+git clone git@github.com:utensils/docker-lobsters.git
 cd docker-lobsters
 git submodule update --init --recursive
 docker-compose up
@@ -27,7 +27,7 @@ This will serve up Lobsters at http://localhost:3000/
 
 ```shell
 docker run --name lobsters -v lobsters_data:/var/lib/mysql -p 3306:3306 -e MYSQL_ROOT_PASSWORD=password -e MYSQL_DATABASE=lobsters -d mariadb
-docker run -p 3000:3000 --link lobsters:mariadb jamesbrink/lobsters
+docker run -p 3000:3000 --link lobsters:mariadb utensils/lobsters
 ```
 
 
