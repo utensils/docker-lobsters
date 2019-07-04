@@ -4,31 +4,12 @@
 
 FROM ruby:2.3-alpine
 
-# Setting this to true will retain linux
-# build tools and dev packages.
-ARG developer_build=false
-# Args for labels.
-ARG VCS_REF
-ARG BUILD_DATE
-
-#Labels
-LABEL maintainer="James Brink, brink.james@gmail.com" \
-      decription="Lobsters Rails Project" \
-      version="latest" \
-      org.label-schema.name="lobsters" \
-      org.label-schema.build-date=$BUILD_DATE \
-      org.label-schema.vcs-ref=$VCS_REF \
-      org.label-schema.vcs-url="https://github.com/jamesbrink/docker-lobsters" \
-      org.label-schema.schema-version="1.0.0-rc1"
-
 # Create lobsters user and group.
-RUN addgroup -S lobsters && adduser -S -h /lobsters -s /bin/sh -G lobsters lobsters
+RUN set -xe; \
+    addgroup -S lobsters; \
+    adduser -S -h /lobsters -s /bin/sh -G lobsters lobsters;
 
-# Copy Gemfile to container.
-COPY ./lobsters/Gemfile ./lobsters/Gemfile.lock /lobsters/
-
-# Install needed runtime & development dependencies. If this is a developer_build we don't remove
-# the build-deps after doing a bundle install.
+# Install needed runtime dependencies.
 RUN set -xe; \
     chown -R lobsters:lobsters /lobsters; \
     apk add --no-cache --update --virtual .runtime-deps \
@@ -36,7 +17,14 @@ RUN set -xe; \
         nodejs \
         npm \
         sqlite-libs \
-        tzdata; \
+        tzdata;
+
+# Install needed development dependencies. If this is a developer_build we don't remove
+# the build-deps after doing a bundle install.
+# Copy Gemfile to container.
+COPY --chown=lobsters:lobsters ./lobsters/Gemfile ./lobsters/Gemfile.lock /lobsters/
+ARG developer_build=false
+RUN set -xe; \
     apk add --no-cache --virtual .build-deps \
         bash \
         build-base \
@@ -49,13 +37,16 @@ RUN set -xe; \
         mariadb-dev \
         sqlite-dev; \
     export PATH=/lobsters/.gem/ruby/2.3.0/bin:$PATH; \
+    export SUPATH=$PATH; \
     export GEM_HOME="/lobsters/.gem"; \
     export GEM_PATH="/lobsters/.gem"; \
     export BUNDLE_PATH="/lobsters/.bundle"; \
     cd /lobsters; \
     su lobsters -c "gem install bundler --user-install"; \
+    su lobsters -c "gem update"; \
+    su lobsters -c "gem install rake"; \
     su lobsters -c "bundle install --no-cache"; \
-    su lobsters -c "bundle add puma"; \
+    su lobsters -c "bundle add puma --version '~> 3.12.1'"; \
     if [ "$developer_build" != "true" ]; \
     then \
         apk del .build-deps; \
@@ -72,14 +63,28 @@ RUN set -xe; \
     mv /lobsters/Gemfile.lock.bak /lobsters/Gemfile.lock; \
     chown -R lobsters:lobsters /lobsters; \
     mv /lobsters/docker-entrypoint.sh /usr/local/bin/; \
-    chmod 755 /usr/local/bin/docker-entrypoint.sh; \
-    rm /lobsters/Gemfile.lock;
+    chmod 755 /usr/local/bin/docker-entrypoint.sh;
 
 # Drop down to unprivileged users
 USER lobsters
 
 # Set our working directory.
 WORKDIR /lobsters/
+
+# Args for labels.
+ARG VCS_REF
+ARG BUILD_DATE
+
+#Labels
+LABEL maintainer="James Brink, brink.james@gmail.com" \
+      org.label-schema.build-date=$BUILD_DATE \
+      org.label-schema.decription="Lobsters Rails Project" \
+      org.label-schema.name="lobsters" \
+      org.label-schema.schema-version="1.0.0-rc1" \
+      org.label-schema.vcs-ref=$VCS_REF \
+      org.label-schema.vcs-url="https://github.com/utensils/docker-lobsters" \
+      org.label-schema.vendor="Utensils" \
+      org.label-schema.version="latest"
 
 # Set environment variables.
 ENV MARIADB_HOST="mariadb" \

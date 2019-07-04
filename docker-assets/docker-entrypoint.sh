@@ -52,7 +52,7 @@ if [ "$RAILS_ENV" = "production" ]; then
 fi
 
 # Start the rails application.
-rails server -b 0.0.0.0 &
+bundle exec rails server -b 0.0.0.0 &
 pid="$!"
 trap "echo 'Stopping Lobsters - pid: $pid'; kill -SIGTERM $pid" SIGINT SIGTERM
 

@@ -12,11 +12,11 @@
 # limitations under the License.
 
 .git
+docker-compose.yml
+Dockerfile
 lobsters/.git
 lobsters/.github
-lobsters/.travis
 lobsters/.gitignore
+lobsters/.travis
 lobsters/log/*
 lobsters/tmp/*
-Dockerfile
-docker-compose.yml
