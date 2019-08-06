@@ -20,10 +20,11 @@ services:
     volumes:
       - 'lobsters_database:/var/lib/mysql'
   app:
+    image: utensils/lobsters:latest
     build:
       context: .
       args:
-        developer_build: "false"
+        DEVELOPER_BUILD: "false"
     environment:
       - MARIADB_HOST=database
       - MARIADB_PORT=3306

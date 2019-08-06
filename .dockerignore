@@ -14,9 +14,12 @@
 .git
 docker-compose.yml
 Dockerfile
+LICENSE
 lobsters/.git
 lobsters/.github
 lobsters/.gitignore
 lobsters/.travis
 lobsters/log/*
 lobsters/tmp/*
+Makefile
+README.md

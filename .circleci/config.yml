@@ -1,0 +1,34 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: docker:stable-git
+    steps:
+      - checkout
+      - setup_remote_docker
+      - run:
+          name: Install build dependencies
+          command: |
+            apk add --no-cache \
+              bash \
+              curl \
+              git \
+              jq \
+              make
+      - run:
+          name: Make Docker Image
+          command: |
+            make
+      - run:
+          name: List Docker Images
+          command: |
+            make list
+      - run:
+          name: Push Docker Image
+          command: |
+            make push
+            make push-readme
+      - run:
+          name: Update MicroBadger
+          command: |
+            make update-micro-badge

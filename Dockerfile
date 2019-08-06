@@ -1,8 +1,8 @@
 # Lobsters
 #
 # VERSION latest
-
-FROM ruby:2.3-alpine
+ARG BASE_IMAGE=ruby:2.3-alpine
+FROM ${BASE_IMAGE}
 
 # Create lobsters user and group.
 RUN set -xe; \
@@ -14,19 +14,22 @@ RUN set -xe; \
     chown -R lobsters:lobsters /lobsters; \
     apk add --no-cache --update --virtual .runtime-deps \
         mariadb-connector-c \
+        bash \
         nodejs \
         npm \
         sqlite-libs \
         tzdata;
 
+# Change shell to bash
+SHELL ["/bin/bash", "-c"]
+
 # Install needed development dependencies. If this is a developer_build we don't remove
 # the build-deps after doing a bundle install.
 # Copy Gemfile to container.
 COPY --chown=lobsters:lobsters ./lobsters/Gemfile ./lobsters/Gemfile.lock /lobsters/
-ARG developer_build=false
+ARG DEVELOPER_BUILD=false
 RUN set -xe; \
     apk add --no-cache --virtual .build-deps \
-        bash \
         build-base \
         curl \
         gcc \
@@ -44,10 +47,10 @@ RUN set -xe; \
     cd /lobsters; \
     su lobsters -c "gem install bundler --user-install"; \
     su lobsters -c "gem update"; \
-    su lobsters -c "gem install rake"; \
+    su lobsters -c "gem install rake -v 12.3.2"; \
     su lobsters -c "bundle install --no-cache"; \
     su lobsters -c "bundle add puma --version '~> 3.12.1'"; \
-    if [ "$developer_build" != "true" ]; \
+    if [ "${DEVELOPER_BUILD,,}" != "true" ]; \
     then \
         apk del .build-deps; \
     fi; \
@@ -71,20 +74,21 @@ USER lobsters
 # Set our working directory.
 WORKDIR /lobsters/
 
-# Args for labels.
+# Build arguments.
 ARG VCS_REF
 ARG BUILD_DATE
+ARG VERSION
 
-#Labels
-LABEL maintainer="James Brink, brink.james@gmail.com" \
-      org.label-schema.build-date=$BUILD_DATE \
-      org.label-schema.decription="Lobsters Rails Project" \
-      org.label-schema.name="lobsters" \
-      org.label-schema.schema-version="1.0.0-rc1" \
-      org.label-schema.vcs-ref=$VCS_REF \
-      org.label-schema.vcs-url="https://github.com/utensils/docker-lobsters" \
-      org.label-schema.vendor="Utensils" \
-      org.label-schema.version="latest"
+# Labels / Metadata.
+LABEL \
+    org.opencontainers.image.authors="James Brink <brink.james@gmail.com>" \
+    org.opencontainers.image.created="${BUILD_DATE}" \
+    org.opencontainers.image.description="Lobsters Rails Project" \
+    org.opencontainers.image.revision="${VCS_REF}" \
+    org.opencontainers.image.source="https://github.com/utensils/docker-lobsters" \
+    org.opencontainers.image.title="lobsters" \
+    org.opencontainers.image.vendor="Utensils" \
+    org.opencontainers.image.version="${VERSION}"
 
 # Set environment variables.
 ENV MARIADB_HOST="mariadb" \
