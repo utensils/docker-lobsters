@@ -19,6 +19,7 @@ jobs:
           name: Make Docker Image
           command: |
             git submodule init
+            git submodule update
             make
       - run:
           name: List Docker Images
