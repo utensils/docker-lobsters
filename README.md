@@ -1,6 +1,6 @@
 # Lobste.rs in a minimal Docker image
 
-[![Docker Automated build](https://img.shields.io/docker/automated/utensils/lobsters.svg)](https://hub.docker.com/r/utensils/lobsters/) [![Docker Pulls](https://img.shields.io/docker/pulls/utensils/lobsters.svg)](https://hub.docker.com/r/utensils/lobsters/) [![Docker Stars](https://img.shields.io/docker/stars/utensils/lobsters.svg)](https://hub.docker.com/r/utensils/lobsters/) [![](https://images.microbadger.com/badges/image/utensils/lobsters.svg)](https://microbadger.com/images/utensils/lobsters "Get your own image badge on microbadger.com") [![](https://images.microbadger.com/badges/version/utensils/lobsters.svg)](https://microbadger.com/images/utensils/lobsters "Get your own version badge on microbadger.com")
+[![CircleCI](https://circleci.com/gh/utensils/docker-lobsters.svg?style=svg)](https://circleci.com/gh/utensils/docker-lobsters) [![Docker Pulls](https://img.shields.io/docker/pulls/utensils/lobsters.svg)](https://hub.docker.com/r/utensils/lobsters/) [![Docker Stars](https://img.shields.io/docker/stars/utensils/lobsters.svg)](https://hub.docker.com/r/utensils/lobsters/) [![](https://images.microbadger.com/badges/image/utensils/lobsters.svg)](https://microbadger.com/images/utensils/lobsters "Get your own image badge on microbadger.com") [![](https://images.microbadger.com/badges/version/utensils/lobsters.svg)](https://microbadger.com/images/utensils/lobsters "Get your own version badge on microbadger.com")  
 
 
 ## About
