@@ -61,6 +61,11 @@ push-readme:
 			echo "Success"; \
 		fi;
 
+# Trigger update of micro-badge
+.PHONY: update-micro-badge
+update-micro-badge:
+	curl -d 'update' "https://hooks.microbadger.com/images/$(REPO_NAMESPACE)/$(IMAGE_NAME)/$$MICROBADGER_TOKEN"
+
 # Remove existing images
 .PHONY: clean
 clean:
