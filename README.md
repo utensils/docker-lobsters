@@ -19,10 +19,11 @@ This will serve up Lobsters at http://localhost/
 git clone git@github.com:utensils/docker-lobsters.git
 cd docker-lobsters
 git submodule update --init --recursive
+make
 docker-compose up
 ```
 
-Using the automated docker hub build and official [MariaDB image][mariadb image].  
+Using the prebuilt docker hub build and official [MariaDB image][mariadb image].  
 This will serve up Lobsters at http://localhost:3000/
 
 ```shell
