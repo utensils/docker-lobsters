@@ -8,7 +8,7 @@
 This repo contains a working example of how to use and deploy [Lobsters][lobsters] within a Docker environment.  
 I have decided to create this project to assist anyone else wanting to get started with Lobsters quickly using Docker.
 
-This image is built off of the official Ruby Docker image ([ruby:2.3-alpine][ruby-alpine])
+This image is built off of the official Ruby Docker image ([ruby:2.7-alpine][ruby-alpine])
 
 ## Quick Start
 

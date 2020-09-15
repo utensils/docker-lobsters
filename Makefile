@@ -5,7 +5,7 @@ REPO_NAMESPACE          ?= utensils
 REPO_USERNAME           ?= jamesbrink
 REPO_API_URL            ?= https://hub.docker.com/v2
 IMAGE_NAME              ?= lobsters
-BASE_IMAGE              ?= ruby:2.3-alpine
+BASE_IMAGE              ?= ruby:2.7-alpine
 DEVELOPER_BUILD         ?= false
 VERSION                 := $(shell git describe --tags --abbrev=0 2>/dev/null || git rev-parse --abbrev-ref HEAD 2>/dev/null)
 VCS_REF                 := $(shell git rev-parse --short HEAD 2>/dev/null || echo "0000000")
