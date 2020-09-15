@@ -109,7 +109,7 @@ ENV MARIADB_HOST="mariadb" \
     SMTP_USERNAME="lobsters" \
     SMTP_PASSWORD="lobsters" \
     RAILS_LOG_TO_STDOUT="1" \
-    PATH="/lobsters/.gem/ruby/2.3.0/bin:$PATH"
+    PATH="/lobsters/.gem/ruby/2.7.0/bin:$PATH"
 
 # Expose HTTP port.
 EXPOSE 3000
