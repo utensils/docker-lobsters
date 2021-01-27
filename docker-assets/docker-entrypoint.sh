@@ -12,7 +12,7 @@ timestamp="date +\"%Y-%m-%d %H:%M:%S\""
 alias echo="echo \"$(eval $timestamp) -$@\""
 
 # Get current state of database.
-db_version=$(rake db:version)
+db_version=$(bundle exec rake db:version)
 db_status=$?
 
 echo "DB Version: ${db_version}"
@@ -20,23 +20,23 @@ echo "DB Version: ${db_version}"
 # Provision Database.
 if [ "$db_status" != "0" ]; then
   echo "Creating database."
-  rake db:create
+  bundle exec rake db:create
   echo "Loading schema."
-  rake db:schema:load
+  bundle exec rake db:schema:load
   echo "Migrating database."
-  rake db:migrate
+  bundle exec rake db:migrate
   echo "Seeding database."
-  rake db:seed
+  bundle exec rake db:seed
 elif [ "$db_version" = "Current version: 0" ]; then
   echo "Loading schema."
-  rake db:schema:load
+  bundle exec rake db:schema:load
   echo "Migrating database."
-  rake db:migrate
+  bundle exec rake db:migrate
   echo "Seeding database."
-  rake db:seed
+  bundle exec rake db:seed
 else
   echo "Migrating database."
-  rake db:migrate
+  bundle exec rake db:migrate
 fi
 
 # Set out SECRET_KEY
